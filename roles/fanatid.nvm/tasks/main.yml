@@ -1,0 +1,45 @@
+---
+- block:
+  - name: Install dependencies
+    package: pkg={{ item }} state=present
+    with_items:
+      - git
+      - build-essential
+      - libssl-dev
+
+  - block:
+    # TODO: what if host already has .nvm and this is not repo?
+    - name: Install nvm {{ nvm.version }}
+      git: repo=https://github.com/creationix/nvm.git dest=~/.nvm version={{ nvm.version }}
+
+    - name: Add nvm loader to ~/.profile
+      lineinfile:
+        dest: ~/.profile
+        create: yes
+        line: "[ -s \"$HOME/.nvm/nvm.sh\" ] && . $HOME/.nvm/nvm.sh"
+
+    - name: Install node {{ nvm.node_version }}
+      shell: . ~/.profile && nvm install {{ nvm.node_version }}
+      args:
+        executable: /bin/bash
+      register: nvm_node_install_result
+      changed_when: "'is already installed.' not in nvm_node_install_result.stderr"
+
+    - name: Check if {{ nvm.node_version }} is the default node version
+      shell: . ~/.profile && nvm ls --no-colors
+      args:
+        executable: /bin/bash
+      register: nvm_check_default
+      changed_when: false
+      failed_when: false
+
+    - name: Set default node version to {{ nvm.node_version }}
+      shell: . ~/.profile && nvm alias default {{ nvm.node_version }} --no-colors
+      args:
+        executable: /bin/bash
+      when: "'default -> {{ nvm.node_version }}' not in nvm_check_default.stdout"
+
+    become_user: "{{ nvm.user }}"
+
+  become: true
+  tags: nvm

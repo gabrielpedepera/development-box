@@ -1,0 +1,5 @@
+virtual_hosts:  
+  - server_name: localhost.rails_app.dev
+    root: /home/vagrant/workspace/rails_app
+    ruby_version: 2.4.1
+    rails_env: development

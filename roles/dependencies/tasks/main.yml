@@ -1,0 +1,28 @@
+- name: Install dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - autoconf
+    - automake
+    - bison
+    - build-essential
+    - git
+    - imagemagick
+    - libc6-dev
+    - libffi-dev
+    - libreadline6
+    - libreadline6-dev
+    - libssl-dev
+    - libgdbm3
+    - libgdbm-dev
+    - libpq-dev
+    - libtool
+    - libmysqlclient-dev
+    - libncurses5-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libxslt1-dev
+    - libyaml-dev
+    - ncurses-dev
+    - sqlite3
+    - zlib1g
+    - zlib1g-dev

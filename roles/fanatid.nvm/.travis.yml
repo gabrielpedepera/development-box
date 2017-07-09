@@ -1,0 +1,24 @@
+---
+sudo: true
+os: linux
+language: python
+python: "2.7"
+addons:
+  apt:
+    packages:
+      - python-pip
+env:
+  - ANSIBLE_VERSION=2.0.0.0
+  - ANSIBLE_VERSION=2.1.0.0
+  - ANSIBLE_VERSION=2.2.0.0
+install:
+  - pip install ansible==$ANSIBLE_VERSION
+  - ansible --version
+script:
+  - rm -rf ~/.nvm # unfortuanally travis already has .nvm folder; temporary hack
+  - cd tests
+  - ansible-playbook -i inventory-local test.yml
+  - . ~/.profile
+  - node --version | grep '6.0.0'
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,0 +1,40 @@
+- name: Read passenger configuration
+  register: passenger_root
+  command: passenger-config --root
+  changed_when: false
+
+- name: Add passenger configuration
+  template:
+    src: passenger.conf.j2
+    dest: /etc/nginx/conf.d/passenger.conf
+  notify: nginx reload
+
+- name: Add virtualhost configuration
+  template:
+    src: virtualhost.conf.j2
+    dest: /etc/nginx/sites-available/{{ item.server_name }}
+  with_items: "{{ virtual_hosts }}"
+  notify: nginx reload
+
+- name: Disable virtualhosts
+  file:
+    path: /etc/nginx/sites-enabled/{{ item.server_name }}
+    state: absent
+  when: item.disabled is defined
+  with_items: "{{ virtual_hosts }}"
+  notify: nginx reload
+
+- name: Remove virtualhost default
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: nginx reload
+
+- name: Enable virtualhosts
+  file:
+    src: /etc/nginx/sites-available/{{ item.server_name }}
+    dest: /etc/nginx/sites-enabled/{{ item.server_name }}
+    state: link
+  when: item.disabled is not defined
+  with_items: "{{ virtual_hosts }}"
+  notify: nginx reload

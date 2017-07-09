@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Kirill Fomichev
+  description: Install Node.js with NVM
+  license: MIT
+  min_ansible_version: 2.0
+  platforms:
+  - name: GenericLinux
+    versions:
+    - any
+  galaxy_tags:
+  - nvm
+  - node
+  - nodejs

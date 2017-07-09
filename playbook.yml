@@ -1,0 +1,53 @@
+- hosts: all
+  vars:
+    rbenv:
+      env: user
+      version: v1.1.0
+      default_ruby: 2.4.1
+      rubies:
+        - version: 2.4.1
+    rbenv_users: ['vagrant']
+    rbenv_plugins:
+      - { name: 'ruby-build',
+          repo: 'https://github.com/rbenv/ruby-build.git',
+          version: 'master' }
+    nvm:
+      user: vagrant
+      version: v0.33.0
+      node_version: '7.0.0'
+
+    postgresql_users:
+      - name: vagrant
+        password: vagrant
+        role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
+
+  vars_files:
+    - vars/virtual_hosts.yml
+
+  roles:
+    - zzet.rbenv
+    - abtris.nginx-passenger
+    - jpnewman.redis
+    - fanatid.nvm
+    - geerlingguy.elasticsearch
+    - geerlingguy.memcached
+    - geerlingguy.postgresql
+    - nginx
+
+  tasks:
+    - name: Set locale en_US.UTF-8
+      locale_gen:
+        name: en_US.UTF-8
+        state: present
+
+    - name: Set locale en_US.UTF-8 in /etc/environment
+      become: true
+      blockinfile:
+        dest: /etc/environment
+        block: |
+          LC_ALL=en_US.UTF-8
+          LANG=en_US.UTF-8
+
+    - name: Install bundler
+      become_user: vagrant
+      command: bash -lc 'gem install bundler'

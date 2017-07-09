@@ -1,0 +1,8 @@
+---
+- hosts: default
+  roles:
+    - role: ansible-role-nvm
+      nvm:
+        user: "{{ ansible_env.USER }}"
+        version: v0.33.0
+        node_version: '6.0.0'
