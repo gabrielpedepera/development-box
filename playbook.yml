@@ -14,21 +14,32 @@
     nvm:
       user: vagrant
       version: v0.33.0
-      node_version: '7.0.0'
+      node_version: '8.0.0'
 
     postgresql_users:
       - name: vagrant
         password: vagrant
         role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
 
+    # oh-my-zsh
+    users:
+      - username: vagrant
+        oh_my_zsh:
+          theme: robbyrussell
+          plugins:
+            - git
+            - ruby
+
   vars_files:
     - vars/virtual_hosts.yml
 
   roles:
+    - gantsign.oh-my-zsh
     - zzet.rbenv
     - abtris.nginx-passenger
     - jpnewman.redis
     - fanatid.nvm
+    - ocha.yarn
     - geerlingguy.elasticsearch
     - geerlingguy.memcached
     - geerlingguy.postgresql
