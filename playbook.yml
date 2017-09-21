@@ -21,15 +21,6 @@
         password: vagrant
         role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
 
-    # oh-my-zsh
-    users:
-      - username: vagrant
-        oh_my_zsh:
-          theme: robbyrussell
-          plugins:
-            - git
-            - ruby
-
   vars_files:
     - vars/virtual_hosts.yml
 
