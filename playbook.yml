@@ -14,7 +14,7 @@
     nvm:
       user: vagrant
       version: v0.33.0
-      node_version: '8.0.0'
+      node_version: '7.0.0'
 
     postgresql_users:
       - name: vagrant
@@ -34,7 +34,6 @@
     - vars/virtual_hosts.yml
 
   roles:
-    - gantsign.oh-my-zsh
     - zzet.rbenv
     - abtris.nginx-passenger
     - jpnewman.redis
